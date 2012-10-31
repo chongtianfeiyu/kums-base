@@ -18,9 +18,9 @@ public class CmdUtil {
 		try {
 			Process p = rt.exec(cmd);
 			BufferedReader bufferedReader1 = new BufferedReader(
-					new InputStreamReader(p.getInputStream()));
+					new InputStreamReader(p.getInputStream(),"GBK"));
 			BufferedReader bufferedReader2 = new BufferedReader(
-					new InputStreamReader(p.getErrorStream()));
+					new InputStreamReader(p.getErrorStream(),"GBK"));
 
 			while ((temp1 = bufferedReader1.readLine()) != null) {
 				sb1.append(temp1);

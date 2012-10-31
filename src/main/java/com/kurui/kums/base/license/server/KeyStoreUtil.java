@@ -103,7 +103,7 @@ public class KeyStoreUtil {
 
 		String filePath = getCertPath() + File.separator + fileName;
 
-		String cmd = " echo Y | keytool -import -alias publiccert -file "
+		String cmd = " cmd   /c echo Y | keytool -import -alias publiccert -file "
 				+ PUBLIC_CERT_STORE_PATH + " -keystore " + filePath;
 		cmd += " -storepass  " + PUBLIC_STORE_PASS;
 
