@@ -1,4 +1,4 @@
-package com.kurui.kums.base.license.server;
+package com.kurui.kums.base.license.server.example;
 
 import java.io.File;
 import java.io.FileInputStream;

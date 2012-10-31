@@ -3,6 +3,8 @@ package com.kurui.kums.base.license.client.example;
 import java.io.File;
 import java.util.prefs.Preferences;
 
+import com.kurui.kums.base.file.FileUtil;
+import com.kurui.kums.base.license.server.KeyStoreUtil;
 import com.kurui.kums.base.util.DateUtil;
 import com.kurui.kums.base.util.StringUtil;
 
@@ -15,8 +17,8 @@ import de.schlichtherle.license.LicenseManager;
 /**
  * 客户端 验证授权证书
  */
-public class ELTLicenseUtil {
-	public ELTLicenseUtil() {
+public class LicenseClientUtil {
+	public LicenseClientUtil() {
 		// ELTLicenseClient.class.getResourceAsStream(arg0)
 	}
 
@@ -45,9 +47,9 @@ public class ELTLicenseUtil {
 
 	protected static final LicenseManager manager = new LicenseManager(
 			new DefaultLicenseParam(PRIVATEKEY_SUBJECT,
-					Preferences.userNodeForPackage(ELTLicenseUtil.class),
+					Preferences.userNodeForPackage(LicenseClientUtil.class),
 					new DefaultKeyStoreParam(
-							ELTLicenseUtil.class, // CUSTOMIZE
+							LicenseClientUtil.class, // CUSTOMIZE
 							KEYSTORE_RESOURCE, PUBSTORE_SUBJECT,
 							KEYSTORE_STORE_PWD, null),// 这里一定要是null
 					new DefaultCipherParam(CIPHER_KEY_PWD)));
@@ -82,20 +84,18 @@ public class ELTLicenseUtil {
 
 	public static String getCertPath() {
 		String realPath = "";
-		realPath = ELTLicenseUtil.class.getResource("").getPath();
+		realPath = KeyStoreUtil.class.getResource("").getPath();
 
-//		System.out.println(realPath);
+		System.out.println(realPath);
 
 		if (!StringUtil.isEmpty(realPath)) {
-			int rootIndex = realPath.indexOf("jboss-5.1.0.GA");
-			if (rootIndex < 0) {
-				rootIndex = realPath.indexOf("core"); 
-			}
+			String flagstr = "kums-base";
+			int rootIndex = realPath.indexOf(flagstr);
 
 			if (rootIndex < 0) {
 				return null;
 			} else {
-				realPath = realPath.substring(0, rootIndex);
+				realPath = realPath.substring(0, rootIndex + flagstr.length());
 			}
 
 			int firstIndex = realPath.indexOf("/");
@@ -103,12 +103,12 @@ public class ELTLicenseUtil {
 				realPath = realPath.substring(1, realPath.length());
 			}
 
-			
-
-			realPath = realPath + "cert"+  File.separator;
-			
-			System.out.println("realPath:"+realPath);
+			realPath = realPath + File.separator + "license" + File.separator;
 		}
+
+		FileUtil.createFolder(realPath);
+
+		System.out.println(realPath);
 		return realPath;
 	}
 

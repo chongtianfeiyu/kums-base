@@ -1,4 +1,4 @@
-package com.kurui.kums.base.license.client;
+package com.kurui.kums.base.license;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,8 +10,8 @@ public class LicenseBo implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String licenseId;
-	private String corporationId;// 客户企业ID
-	private String corporationName;// 企业名称
+	private String companyNo;// 客户企业ID
+	private String companyName;// 企业名称
 
 	private String licenseType;// 授权类型 TRIAL试用 OFFICIAL正式
 
@@ -29,6 +29,17 @@ public class LicenseBo implements Serializable {
 	private String errorInfo;//...
 	private String localMACAddress;// 本地MAC
 
+	private String licenseFileName="";
+	
+	
+	
+	public String getLicenseFileName() {
+		return licenseFileName;
+	}
+
+	public void setLicenseFileName(String licenseFileName) {
+		this.licenseFileName = licenseFileName;
+	}
 
 	public String getErrorCode() {
 		return errorCode;
@@ -62,13 +73,7 @@ public class LicenseBo implements Serializable {
 		this.staffNumber = staffNumber;
 	}
 
-	public String getCorporationId() {
-		return corporationId;
-	}
 
-	public void setCorporationId(String corporationId) {
-		this.corporationId = corporationId;
-	}
 
 	public String getLicenseType() {
 		return licenseType;
@@ -110,12 +115,21 @@ public class LicenseBo implements Serializable {
 		this.licenseId = licenseId;
 	}
 
-	public String getCorporationName() {
-		return corporationName;
+
+	public String getCompanyNo() {
+		return companyNo;
 	}
 
-	public void setCorporationName(String corporationName) {
-		this.corporationName = corporationName;
+	public void setCompanyNo(String companyNo) {
+		this.companyNo = companyNo;
+	}
+
+	public String getCompanyName() {
+		return companyName;
+	}
+
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 
 	public String getDescription() {

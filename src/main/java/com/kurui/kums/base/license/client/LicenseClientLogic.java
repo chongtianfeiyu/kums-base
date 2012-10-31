@@ -7,7 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.kurui.kums.base.file.XmlUtil_dom4j;
-import com.kurui.kums.base.license.client.example.ELTLicenseUtil;
+import com.kurui.kums.base.license.LicenseBo;
+import com.kurui.kums.base.license.client.example.LicenseClientUtil;
 import com.kurui.kums.base.util.MachineUtil;
 import com.kurui.kums.base.util.StringUtil;
 
@@ -17,18 +18,21 @@ import de.schlichtherle.license.DefaultLicenseParam;
 import de.schlichtherle.license.LicenseContent;
 import de.schlichtherle.license.LicenseManager;
 
-public class LicenseLogicImpl  {
+public class LicenseClientLogic  {
 	protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
+	public static void main(String[] args) {
+		queryLicenseContent();
+	}
 	/**
 	 * 获取客户端授权证书信息
 	 */
 
-	public LicenseBo queryLicenseContent() {
+	public static LicenseBo queryLicenseContent() {
 		LicenseBo licenseBo=new  LicenseBo();
 		LicenseContent content = null;
 		try {
-			String licensePath = ELTLicenseUtil.getCertPath();
+			String licensePath = LicenseClientUtil.getCertPath();
 
 			final String PRIVATEKEY_SUBJECT = "privatekey"; //
 			final String PUBSTORE_SUBJECT = "publiccert"; //
@@ -46,9 +50,9 @@ public class LicenseLogicImpl  {
 			LicenseManager manager = new LicenseManager(
 					new DefaultLicenseParam(PRIVATEKEY_SUBJECT,
 							Preferences
-									.userNodeForPackage(ELTLicenseUtil.class),
+									.userNodeForPackage(LicenseClientUtil.class),
 							new DefaultKeyStoreParam(
-									ELTLicenseUtil.class, // CUSTOMIZE
+									LicenseClientUtil.class, // CUSTOMIZE
 									KEYSTORE_RESOURCE, PUBSTORE_SUBJECT,
 									KEYSTORE_STORE_PWD, null),// 这里一定要是null
 							new DefaultCipherParam(CIPHER_KEY_PWD)));
@@ -84,7 +88,7 @@ public class LicenseLogicImpl  {
 		return licenseBo;
 	}
 	
-	public LicenseBo adapter(LicenseContent content){
+	public static LicenseBo adapter(LicenseContent content){
 		LicenseBo licenseBo=new LicenseBo();
 		
 		if (content!=null) {
@@ -104,8 +108,8 @@ public class LicenseLogicImpl  {
 					String staffNumber=XmlUtil_dom4j.getTextByNode(doc,"//root/staffNumber");							
 					
 					licenseBo.setLicenseId(licenseId);
-					licenseBo.setCorporationId(corporationId);
-					licenseBo.setCorporationName(corporationName);
+					licenseBo.setCompanyNo(corporationId);
+					licenseBo.setCompanyName(corporationName);
 					licenseBo.setLicenseType(licenseType);
 					licenseBo.setMacaddress(macaddress);
 					licenseBo.setDescription(description);
@@ -132,8 +136,5 @@ public class LicenseLogicImpl  {
 		return licenseBo;
 	}
 
-	public static void main(String[] args) {
-		LicenseLogicImpl imp = new LicenseLogicImpl();
-		imp.queryLicenseContent();
-	}
+
 }

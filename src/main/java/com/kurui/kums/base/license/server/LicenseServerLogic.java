@@ -7,8 +7,10 @@ import java.util.prefs.Preferences;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.kurui.kums.base.file.FileUtil;
+import com.kurui.kums.base.license.LicenseBo;
+import com.kurui.kums.base.license.server.example.MyLicenseManager;
 import com.kurui.kums.base.util.DateUtil;
-import com.kurui.kums.base.util.MachineUtil;
 import com.kurui.kums.base.util.StringUtil;
 
 import de.schlichtherle.license.DefaultCipherParam;
@@ -18,13 +20,16 @@ import de.schlichtherle.license.LicenseContent;
 import de.schlichtherle.license.LicenseManager;
 import de.schlichtherle.license.LicenseParam;
 
-public class LicenseLogicImpl  {
+public class LicenseServerLogic  {
 	protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
+	public static void main(String[] args) {
+		LicenseBo license=new LicenseBo();
+		license=createLicense(license);
+		
+	}
 
-	public License createLicense(License license) {
-		LicenseParam parameter = getNormalLicenseParam();
-
+	public static LicenseBo createLicense(LicenseBo license) {
 		LicenseContent content = new LicenseContent();
 		content.setConsumerType("User");// 不能改
 		content.setConsumerAmount(1);
@@ -37,9 +42,9 @@ public class LicenseLogicImpl  {
 
 		String info = "<root>";
 		info += "<licenseId></licenseId>";
-		info += "<corporationId>" + license.getCorporationId()
+		info += "<corporationId>" + license.getCompanyNo()
 				+ "</corporationId>";
-		info += "<corporationName>" + license.getCorporationName()
+		info += "<corporationName>" + license.getCompanyName()
 				+ "</corporationName>";
 		info += "<license-type>" + license.getLicenseType() + "</license-type>";
 
@@ -49,11 +54,11 @@ public class LicenseLogicImpl  {
 		info += "</root>";
 		content.setInfo(info);
 
+		LicenseParam parameter = getNormalLicenseParam();
 		String licenseFileName = createLicenseKey(parameter, content);// 创建License
 
 		license.setLicenseFileName(licenseFileName);
 		
-//		licenseDao.update(license);
 		return license;
 	}
 
@@ -66,14 +71,14 @@ public class LicenseLogicImpl  {
 						CIPHER_KEY_PWD));
 		return parameter;
 	}
-
+ 
 	private static final String SUBJECT = "privatekey"; // CUSTOMIZE
 	private static final String KEYSTORE_RESOURCE = "privateKeys.store"; // 私匙库文件名
 	private static final String KEYSTORE_STORE_PWD = "privatestore123"; // 私匙库密码
 	private static final String KEYSTORE_KEY_PWD = "privatekey123"; // 私匙库主键密码
 	private static final String CIPHER_KEY_PWD = "a8a8a8"; // 即将生成的license密码
 
-	private String createLicenseKey(LicenseParam parameter,
+	private static String createLicenseKey(LicenseParam parameter,
 			LicenseContent content) {
 		String result = "";
 		LicenseManager manager = new LicenseManager(parameter);
@@ -97,48 +102,29 @@ public class LicenseLogicImpl  {
 
 	public static String getLicenseStorePath() {
 		String realPath = "";
-		realPath = MyLicenseManager.class.getResource("").getPath();
+		realPath = KeyStoreUtil.class.getResource("").getPath();
 
 		System.out.println(realPath);
 
 		if (!StringUtil.isEmpty(realPath)) {
-			int rootIndex = realPath.indexOf("jboss-5.1.0.GA");
-			if (rootIndex <0) {
-				rootIndex = realPath.indexOf("elt/war");
-				if (rootIndex>-1) {
-					rootIndex+=4;
-				}
-			}
-			if (rootIndex <0) {
-				rootIndex = realPath.indexOf("war/war");
-//				if (rootIndex>-1) {
-//					rootIndex+=4;
-//				}
-			}
-			if (rootIndex <0) {
-				rootIndex = realPath.indexOf("elt/core");
-				if (rootIndex>-1) {
-					rootIndex+=4;
-				}
-			}
+			String flagstr = "kums-base";
+			int rootIndex = realPath.indexOf(flagstr);
 
 			if (rootIndex < 0) {
 				return null;
 			} else {
-				realPath = realPath.substring(0, rootIndex);
+				realPath = realPath.substring(0, rootIndex + flagstr.length());
 			}
 
 			int firstIndex = realPath.indexOf("/");
 			if (firstIndex == 0) {
-				if (MachineUtil.getIsWindowsOS()) {
-					realPath = realPath.substring(1, realPath.length());
-				}				
+				realPath = realPath.substring(1, realPath.length());
 			}
 
-			realPath=realPath.replace("file:/", "");
-
-			realPath = realPath + "licenseStore" + File.separator;
+			realPath = realPath + File.separator + "license" + File.separator;
 		}
+
+		FileUtil.createFolder(realPath);
 
 		System.out.println(realPath);
 		return realPath;
