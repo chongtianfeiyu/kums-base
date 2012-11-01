@@ -1,6 +1,7 @@
 package com.kurui.kums.base.license.server;
 
 import java.io.File;
+import java.util.Date;
 import java.util.Random;
 import java.util.prefs.Preferences;
 
@@ -11,6 +12,7 @@ import com.kurui.kums.base.file.FileUtil;
 import com.kurui.kums.base.license.LicenseBo;
 import com.kurui.kums.base.license.server.example.MyLicenseManager;
 import com.kurui.kums.base.util.DateUtil;
+import com.sun.jmx.snmp.Timestamp;
 
 import de.schlichtherle.license.DefaultCipherParam;
 import de.schlichtherle.license.DefaultKeyStoreParam;
@@ -24,6 +26,22 @@ public class LicenseServerLogic  {
 
 	public static void main(String[] args) {
 		LicenseBo license=new LicenseBo();
+		license.setCompanyNo("C223333");
+		license.setCompanyName("通用汽车");
+		license.setLicenseType("OFFICIAL");
+		license.setStaffNumber(10);
+		license.setMacaddress("00-50-56-C0-00-08");
+		license.setNotafter(DateUtil.getTimestamp("2012-12-1", "yyyy-MM-dd"));
+		license.setDescription("hello world");
+//		private String companyNo;// 客户企业ID
+//		private String companyName;// 企业名称
+//		private String licenseType;// 授权类型 TRIAL试用 OFFICIAL正式
+//		private int staffNumber = 0;// 最大员工数
+//		private String macaddress;// 授权网卡地址
+//		private Date notafter;// 截止时间
+//		private Date issued;// 授权时间
+//		private String description;// 备注说明
+		
 		license=createLicense(license);
 		
 	}
@@ -37,7 +55,9 @@ public class LicenseServerLogic  {
 		java.util.Calendar cal = java.util.Calendar.getInstance();
 		content.setIssued(cal.getTime());// 发布时间
 
-		content.setNotAfter(license.getNotafter());// 截止有效期
+		String notafterDateStr=DateUtil.getDateString(license.getNotafter(),"yyyy-MM-dd HH:mm:ss");
+		Date notafterDate=DateUtil.getDate(notafterDateStr,"yyyy-MM-dd HH:mm:ss");
+		content.setNotAfter(notafterDate);// 截止有效期
 
 		String info = "<root>";
 		info += "<licenseId></licenseId>";

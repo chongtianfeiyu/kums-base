@@ -1,5 +1,6 @@
 package com.kurui.kums.base.license.client;
 
+import java.sql.Timestamp;
 import java.util.prefs.Preferences;
 
 import org.dom4j.Document;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.kurui.kums.base.file.XmlUtil_dom4j;
 import com.kurui.kums.base.license.LicenseBo;
 import com.kurui.kums.base.license.client.example.LicenseClientUtil;
+import com.kurui.kums.base.util.DateUtil;
 import com.kurui.kums.base.util.MachineUtil;
 import com.kurui.kums.base.util.StringUtil;
 
@@ -91,9 +93,10 @@ public class LicenseClientLogic  {
 	public static LicenseBo adapter(LicenseContent content){
 		LicenseBo licenseBo=new LicenseBo();
 		
-		if (content!=null) {
-			licenseBo.setNotafter(content.getNotAfter());
-			licenseBo.setIssued(content.getIssued());
+		if (content!=null) {			
+			licenseBo.setIssued(new Timestamp(content.getIssued().getTime()));
+			licenseBo.setNotafter(new Timestamp(content.getNotAfter().getTime()));
+			
 			
 			String contentInfo=content.getInfo();
 			if (!StringUtil.isEmpty(contentInfo)) {

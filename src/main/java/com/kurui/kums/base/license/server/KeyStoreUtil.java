@@ -128,9 +128,14 @@ public class KeyStoreUtil {
 		System.out.println(realPath);
 
 		if (!StringUtil.isEmpty(realPath)) {
-			String flagstr = "kums-base";
+			String flagstr = "WEB-INF";
 			int rootIndex = realPath.indexOf(flagstr);
-
+			
+			if (rootIndex < 0) {
+				flagstr = "kums-base";
+				rootIndex = realPath.indexOf(flagstr);
+			}
+			
 			if (rootIndex < 0) {
 				return null;
 			} else {
@@ -141,7 +146,9 @@ public class KeyStoreUtil {
 			if (firstIndex == 0) {
 				realPath = realPath.substring(1, realPath.length());
 			}
-
+			
+			realPath=realPath.replaceFirst("file:/","");
+			
 			realPath = realPath + File.separator + "cert" + File.separator;
 		}
 

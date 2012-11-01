@@ -1,7 +1,7 @@
 package com.kurui.kums.base.license;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class LicenseBo implements Serializable {
 
@@ -18,21 +18,19 @@ public class LicenseBo implements Serializable {
 	private int staffNumber = 0;// 最大员工数
 
 	private String macaddress;// 授权网卡地址
-	private Date notafter;// 截止时间
+	private Timestamp notafter;// 截止时间
 
-	private Date issued;// 授权时间
+	private Timestamp issued;// 授权时间
 
 	private String description;// 备注说明
 
 	// ================
-	private String errorCode;//SUCESS FAILED
-	private String errorInfo;//...
+	private String errorCode;// SUCESS FAILED
+	private String errorInfo;// ...
 	private String localMACAddress;// 本地MAC
 
-	private String licenseFileName="";
-	
-	
-	
+	private String licenseFileName = "";
+
 	public String getLicenseFileName() {
 		return licenseFileName;
 	}
@@ -73,8 +71,6 @@ public class LicenseBo implements Serializable {
 		this.staffNumber = staffNumber;
 	}
 
-
-
 	public String getLicenseType() {
 		return licenseType;
 	}
@@ -91,20 +87,20 @@ public class LicenseBo implements Serializable {
 		this.macaddress = macaddress;
 	}
 
-	public Date getNotafter() {
-		return notafter;
-	}
-
-	public void setNotafter(Date notafter) {
-		this.notafter = notafter;
-	}
-
-	public Date getIssued() {
+	public Timestamp getIssued() {
 		return issued;
 	}
 
-	public void setIssued(Date issued) {
+	public void setIssued(Timestamp issued) {
 		this.issued = issued;
+	}
+
+	public Timestamp getNotafter() {
+		return notafter;
+	}
+
+	public void setNotafter(Timestamp notafter) {
+		this.notafter = notafter;
 	}
 
 	public String getLicenseId() {
@@ -114,7 +110,6 @@ public class LicenseBo implements Serializable {
 	public void setLicenseId(String licenseId) {
 		this.licenseId = licenseId;
 	}
-
 
 	public String getCompanyNo() {
 		return companyNo;
