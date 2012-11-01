@@ -11,7 +11,6 @@ import com.kurui.kums.base.file.FileUtil;
 import com.kurui.kums.base.license.LicenseBo;
 import com.kurui.kums.base.license.server.example.MyLicenseManager;
 import com.kurui.kums.base.util.DateUtil;
-import com.kurui.kums.base.util.StringUtil;
 
 import de.schlichtherle.license.DefaultCipherParam;
 import de.schlichtherle.license.DefaultKeyStoreParam;
@@ -88,7 +87,9 @@ public class LicenseServerLogic  {
 			fileName += new Random().nextInt(10000);
 			fileName += ".lic";
 
-			String filePath = getLicenseStorePath() + fileName;
+			String filePath = KeyStoreUtil.getCertPath()+File.separator+"license";
+			FileUtil.createFolder(filePath);
+			filePath+=File.separator+ fileName;
 			manager.store(content, new File(filePath));
 
 			result = fileName;
@@ -100,35 +101,7 @@ public class LicenseServerLogic  {
 		return result;
 	}
 
-	public static String getLicenseStorePath() {
-		String realPath = "";
-		realPath = KeyStoreUtil.class.getResource("").getPath();
 
-		System.out.println(realPath);
-
-		if (!StringUtil.isEmpty(realPath)) {
-			String flagstr = "kums-base";
-			int rootIndex = realPath.indexOf(flagstr);
-
-			if (rootIndex < 0) {
-				return null;
-			} else {
-				realPath = realPath.substring(0, rootIndex + flagstr.length());
-			}
-
-			int firstIndex = realPath.indexOf("/");
-			if (firstIndex == 0) {
-				realPath = realPath.substring(1, realPath.length());
-			}
-
-			realPath = realPath + File.separator + "license" + File.separator;
-		}
-
-		FileUtil.createFolder(realPath);
-
-		System.out.println(realPath);
-		return realPath;
-	}
 
 	
 

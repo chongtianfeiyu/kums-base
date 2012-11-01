@@ -78,7 +78,9 @@ public class KeyStoreUtil {
 		fileName += new Random().nextInt(1000);
 		fileName += ".cer";
 
-		String filePath = getCertPath() + File.separator + fileName;
+		String filePath = getCertPath()  +File.separator+"publicCerts";
+		FileUtil.createFolder(filePath);
+		filePath+= File.separator + fileName;
 
 		String cmd = " keytool -export -alias privatekey -file " + filePath
 				+ " -keystore " + PRIVATE_KEY_STORE_PATH;
@@ -101,7 +103,8 @@ public class KeyStoreUtil {
 		fileName += new Random().nextInt(1000);
 		fileName += ".store";
 
-		String filePath = getCertPath() + File.separator + fileName;
+		String filePath = getCertPath() +File.separator+"publicCerts";
+		filePath+= File.separator + fileName;
 
 		String cmd = " cmd   /c echo Y | keytool -import -alias publiccert -file "
 				+ PUBLIC_CERT_STORE_PATH + " -keystore " + filePath;
